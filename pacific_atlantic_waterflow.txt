@@ -1,0 +1,62 @@
+class Solution {
+public:
+
+     void dfs(int row, int col,vector<vector<int>>&heights , int pre, vector<vector<int>>&ocn)
+     {
+          if(row<0||col<0||row>=heights.size()||col>=heights[0].size())
+          {
+              return;
+          }
+          if(heights[row][col]<pre)
+          {
+              return;
+          }
+          if(ocn[row][col]==-1)
+          {
+              return;
+          }
+          ocn[row][col]=-1;
+          dfs(row-1,col,heights,heights[row][col],ocn);
+          dfs(row+1,col,heights,heights[row][col],ocn);
+          dfs(row,col-1,heights,heights[row][col],ocn);
+          dfs(row,col+1,heights,heights[row][col],ocn);
+
+
+     }
+
+
+
+    vector<vector<int>> pacificAtlantic(vector<vector<int>>& heights) {
+        
+        
+       vector<vector<int>>precefiq(heights.size(),vector<int>(heights[0].size(),0));
+      vector<vector<int>>atlantic(heights.size(),vector<int>(heights[0].size(),0));
+        for(int k=0;k<heights[0].size();k++)
+        {
+            dfs(0,k,heights,INT_MIN, precefiq);
+            dfs(heights.size()-1,k,heights,INT_MIN, atlantic);
+        }
+           for(int r=0; r<heights.size();r++)
+        {
+            dfs(r,0,heights,INT_MIN, precefiq);
+            dfs(r,heights[0].size()-1,heights,INT_MIN, atlantic);
+        }
+        vector<vector<int>>ans;
+        vector<int>v;
+        for(int i=0;i<heights.size();i++)
+        {
+            for(int j=0;j<heights[0].size();j++)
+            {
+                if(precefiq[i][j]==-1 and precefiq[i][j]==atlantic[i][j])
+                {
+                    v.clear();
+                           v.push_back(i);
+                           v.push_back(j);
+                           ans.push_back(v);
+                }
+            }
+        }
+        return ans;
+
+    }
+};
